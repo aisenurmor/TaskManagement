@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Görev Detay {% endblock %}
+
+{% block icerik %}
+    <div class="row">
+        <div class="col-lg-12 col-lg-offset-0">
+            <a href="{% url 'yonetim:task_list' %}"> Görev Listesine Dön </a>
+        </div>
+        <br><br>
+
+        <div class="col-lg-6 col-lg-offset-3">
+
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissable" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                {{ message }}
+            </div>
+            {% endfor %}
+
+        <h3 class="page-header">{{ task.summary }} | <small> {{ task.created_date }} - {{ task.finished_date }}</small></h3>
+            <h5>{% for category in task.category.all %}
+                    <b>Kategori: </b>{{ category }}
+                {% endfor %}
+                |
+                {{ task.worker.first_name }} {{ task.worker.last_name }}
+                |
+                {% for status in  task.status.all %}
+                    <b>Durum: </b>{{ status }}
+                {% endfor %}
+                |</h5>
+            <br>
+            {% if task.get_image_or_default %}
+            <img src="{{ task.get_image_or_default }}" class="img-responsive"><br>
+            {% endif %}
+        <p>
+            {{ task.content|safe}}
+        </p>
+        <br><br><br>
+        <h6>En son güncelleme: {{ task.updated_date|timesince }}</h6>
+        {% if request.user.is_authenticated %}
+            {% if request.user == task.worker or request.user.is_superuser %}
+            <a class="btn btn-primary" href="{% url 'yonetim:task_update' task.slug %}">Düzenle</a>
+            {% endif %}
+            {% if request.user.is_superuser %}
+            <a class="btn btn-danger" href="{% url 'yonetim:task_delete' task.slug %}">Sil</a>
+            {% endif %}
+        {% endif %}
+            <br><br><br><br>
+        </div>
+    </div>
+    <div class="row">
+    {% if task.comment.all %}
+    <div class="col-lg-6 col-sm-offset-3">
+        <h3 class="page-header"> Yorumlar &nbsp; ({{ task.comment.all|length }}) </h3>
+        {% for comment in task.comment.all %}
+            <div class="col-lg-12">
+                <h4 style="color: #2C009F">{{ comment.user.get_full_name }} &nbsp;&nbsp; <small>{{ comment.tarih|timesince }} once</small></h4>
+                <p>{{ comment.content }}</p>
+                <hr>
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    </div>
+    <div class="row">
+        <div class="col-lg-6 col-lg-offset-3">
+            <form method="post" action="">
+                {% csrf_token %}
+                {% include 'form_template.html' %}
+                <input type="submit" value="Gönder" class="btn btn-primary">
+            </form>
+            <br><br><br><br>
+        </div>
+    </div>
+{% endblock %}

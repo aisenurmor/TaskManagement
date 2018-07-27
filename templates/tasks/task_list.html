@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Anasayfa {% endblock %}
+
+{% block icerik %}
+    <div class="col-lg-9 col-lg-offset-1">
+
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissable" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        <div class="col-lg-4 col-lg-offset-12" style="padding: 0">
+            <form method="get">
+                {% for field in filter_form %}
+                    <div class="col-lg-6" style="padding: 1">
+                        <div class="form-group">
+                            {{ field }}
+                        </div>
+                    </div>
+                {% endfor %}
+                <input type="submit" class="btn btn-primary" value="Sorgula">
+            </form>
+            <br><br><br>
+        </div>
+        {% if task_list %}
+            <table id="tasks" border="2" width="100%" style="text-align: center; border-color: #adacb8; border-style: hidden">
+                <tr id="tasks" style="background-color: #D2D4FA">
+                    <th width="20%" style="text-align: center"><h4>Başlık</h4>
+                    <th width="20%" style="text-align: center"><h4>Kategori</h4></th>
+                    <th width="17%" style="text-align: center"><h4>Çalışan</h4></th>
+                    <th width="13%" style="text-align: center"><h4>Durum</h4></th>
+                    <th width="15%" style="text-align: center"><h4>Başlangıç</h4></th>
+                    <th width="15%" style="text-align: center"><h4>Bitiş</h4></th>
+                </tr>
+            {% for task in task_list %}
+                <tr id="plist" style="font-size: 16px">
+                    <td height="50px"><a href="{% url 'yonetim:task_detail' task.slug %}"> {{ task.summary }} </a></td>
+                    <td>{% for category in task.category.all %}
+                           <small>{{ category }}</small>
+                       {% endfor %}</td>
+                    <td>{{ task.worker.get_full_name }}</td>
+                    <td>{% for status in  task.status.all %}
+                           <small>{{ status }}</small>
+                       {% endfor %}</td>
+                    <td>{{ task.created_date }}</td>
+                    <td>{{ task.finished_date }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+            {% else %}
+                <p>Görev bulunmamaktadır.</p>
+        {% endif %}
+
+
+        {% if task_list.has_other_pages %}
+            <ul class="pagination">
+                {% if task_list.has_previous %}
+                    <li><a href="?page={{ task_list.previous_page_number }}">&laquo;</a></li>
+                {% else %}
+                    <li class="disabled"><span>&laquo;</span></li>
+                {% endif %}
+                {% for i in task_list.paginator.page_range %}
+                    {% if task_list.number == i %}
+                        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                    {% else %}
+                        <li><a href="?page={{ i }}">{{ i }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if task_list.has_next %}
+                    <li><a href="?page={{ task_list.next_page_number }}">&raquo;</a></li>
+                {% else %}
+                    <li class="disabled"><span>&raquo;</span></li>
+                {% endif %}
+            </ul>
+        {% endif %}
+
+    </div>
+{% endblock %}

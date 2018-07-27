@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block kodblok %}
+        <script src="{% static 'js/upload_js/vendor/jquery.ui.widget.js' %}"></script>
+        <script src="{% static 'js/upload_js/jquery.iframe-transport.js' %}"></script>
+        <script src="{% static 'js/upload_js/jquery.fileupload.js' %}"></script>
+        <script src="{% static 'js/upload_js/basic_upload.js' %}"></script>
+
+{% endblock %}
+
+{% block title %} Profili Düzenle {% endblock %}
+{% block icerik %}
+    <div class="modal fade" id="modal-progress" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Uploading...</h4>
+            </div>
+            <div class="modal-body">
+              <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: 0%;">0%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="row">
+    <div class="col-lg-8 col-lg-offset-2">
+    <h2 class="page-header">Profili Düzenle</h2>
+        <div class="col-lg-5 col-sm-offset-4">
+            <img style="border:10px solid navajowhite; height: 200px; width: 200px" class="img-circle" src="{{ request.user.userprofile.profil_photo.url }}"/>
+            <br><br>
+            <button style="margin-left: 32px" type="button" class="btn btn-primary js-upload-photos">
+            <span class="glyphicon glyphicon-cloud-upload"></span> Upload photos
+            </button>
+
+            {# 2. FILE INPUT TO BE USED BY THE PLUG-IN #}
+            <input id="fileupload" type="file" name="profil_photo"
+                style="display: none;"
+                data-url="{% url 'users:user_upload_photo' %}"
+                data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
+
+        </div>
+
+    <div class="row">
+    <div class="col-lg-8 col-lg-offset-2">
+    <form action="{% url 'users:user_edit_profile' %}" method="post">
+        {% csrf_token %}
+        {% include 'form_template.html' %}
+        <br>
+        {{ form.media }}
+        <input type="submit" value="Kaydet" class="btn btn-success">
+        <a href="{% url 'users:password_change' %}" class="btn btn-primary">Şifremi Değiştir</a>
+    </form>
+        <br><br>
+    </div></div></div></div>
+{% endblock %}

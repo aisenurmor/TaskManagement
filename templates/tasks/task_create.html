@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Görev Oluştur {% endblock %}
+
+{% block icerik %}
+    <div class="row">
+    <div class="col-lg-8 col-lg-offset-2">
+    <h2 class="page-header">Görev Oluştur</h2>
+
+    {% if form.errors %}
+        {{ form.errors }}
+    {% endif %}
+
+    <div class="row">
+    <div class="col-lg-8 col-lg-offset-2">
+        <form enctype="multipart/form-data" method="post">
+            {% csrf_token %}
+            {{ form.media }}
+            {% include 'form_template.html' %}
+            <input type="submit" value="Kaydet" class="btn btn-success">
+            <br><br><br><br>
+        </form>
+    </div>
+    </div>
+    </div>
+    </div>
+
+{% endblock %}

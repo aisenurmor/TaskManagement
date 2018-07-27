@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Profil {% endblock %}
+{% block icerik %}
+
+    <div class="row">
+    <div class="col-lg-12">
+        <div class="col-lg-3" style="border-radius: 10px; margin-top:20px; background-color: silver; padding-top: 20px; margin-left: 20px; margin-right: 60px;">
+            <img style="height: 200px; width: 200px;" src="{{ user.userprofile.profil_photo.url }}" class="img-responsive center-block">
+            <hr>
+            <h5 style="text-align: center">{{ user.get_full_name|upper }}</h5>
+            <p style="text-align: center">{{ user.userprofile.dogum }}</p>
+            <p style="text-align: center"><b>Toplam Görev: {{ task_list|length }}</b></p>
+            <p style="text-align: center"><a class="btn btn-success" href="{%  url 'users:password_change' %}">Şifre Değiştir</a> <a class="btn btn-primary" href="{% url 'users:user_edit_profile' %}">Profili Düzenle</a> </p>
+            <br>
+        </div>
+        <div class="col-lg-7" style="margin-top: 50px;">
+            <div class="col-lg-10">
+                <h2 style="text-align: left"> &nbsp;&nbsp;Görevleriniz</h2>
+                <hr>
+                {% if task_list|length > 0 %}
+                {% include 'tasks/my_tasks.html' %}
+            {% else %}
+                <p style="text-align: center">Göreviniz bulunmamaktadır.</p>
+            {% endif %}
+            </div>
+
+            <br><br>
+    </div></div></div>
+{% endblock %}

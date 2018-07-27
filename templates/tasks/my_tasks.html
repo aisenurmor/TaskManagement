@@ -1,0 +1,28 @@
+{% if task_list %}
+    <div class="col-lg-12">
+            <table id="tasks" border="2" width="100%" style="text-align: center; border-color: #adacb8; border-style: hidden">
+                <tr id="tasks" style="background-color: #D2D4FA">
+                    <th width="20%" style="text-align: center"><h4>Başlık</h4>
+                    <th width="20%" style="text-align: center"><h4>Kategori</h4></th>
+                    <th width="20%" style="text-align: center"><h4>Durum</h4></th>
+                    <th width="20%" style="text-align: center"><h4>Başlangıç</h4></th>
+                    <th width="20%" style="text-align: center"><h4>Bitiş</h4></th>
+                </tr>
+            {% for task in task_list %}
+                <tr id="plist" style="font-size: 16px">
+                    <td height="50px"><a href="{% url 'yonetim:task_detail' task.slug %}"> {{ task.summary }} </a></td>
+                    <td>{% for category in task.category.all %}
+                           <small>{{ category }}</small>
+                       {% endfor %}</td>
+                    <td>{% for status in  task.status.all %}
+                           <small>{{ status }}</small>
+                       {% endfor %}</td>
+                    <td>{{ task.created_date }}</td>
+                    <td>{{ task.finished_date }}</td>
+                </tr>
+            {% endfor %}
+            </table>
+            {% else %}
+                <p>Görev bulunmamaktadır.</p>
+    </div>
+{% endif %}

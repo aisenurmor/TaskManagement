@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Giriş Yap {% endblock %}
+
+{% block icerik %}
+    <br><br><br>
+
+    <div class="col-lg-4 col-lg-offset-4" style="background-color: #eaeafb; border-style: dashed; border-color: #005500">
+    <div class="col-lg-10 col-lg-offset-1">
+        <br><br>
+        <h2 class="page-header" align="center"> Giriş </h2>
+        <form action="{% url 'users:user_login' %}" method="post">
+            {% csrf_token %}
+            {% include 'form_template.html' %}
+            <div class="col-lg-offset-5">
+                <input type="submit" class="btn btn-success" value="Giriş">
+            </div>
+            <br>
+            {% if hata_mesaji %}
+                <h5 style="color: #761c19">{{ hata_mesaji }}</h5>
+            {% endif %}
+        </form>
+        <br><br>
+    </div>
+    </div>
+{% endblock %}

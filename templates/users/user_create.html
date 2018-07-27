@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Çalışan Ekle {% endblock %}
+{% block icerik %}
+    <div class="row">
+    <div class="col-lg-8 col-lg-offset-2">
+    <h2 class="page-header">Çalışan Ekle</h2>
+
+    <div class="row">
+    <div class="col-lg-8 col-lg-offset-2">
+    <form action="{% url 'users:user_create' %}" method="post">
+        {% csrf_token %}
+        {% include 'form_template.html' %}
+        <input type="submit" value="Kaydet" class="btn btn-success">
+    </form>
+        <br><br>
+    </div></div></div></div>
+{% endblock %}
